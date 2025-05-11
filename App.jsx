@@ -1,10 +1,36 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import Navigation from "./components/Navigation"
 import "./App.css"
 
+// Add the useScrollAnimation hook from the first file
+function useScrollAnimation() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const elements = document.querySelectorAll(".fade-in");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+}
+
 export default function App() {
+  // Add the scroll animation hook
+  useScrollAnimation();
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [resumeSubmitted, setResumeSubmitted] = useState(false)
   const [contactSubmitted, setContactSubmitted] = useState(false)
@@ -41,7 +67,7 @@ export default function App() {
       <Navigation/>
 
       {/* Hero Section */}
-      <header id="home" className="hero" ref={heroRef}>
+      <header id="home" className="hero fade-in" ref={heroRef}>
         <div className="hero-content">
           <div className="accent-line"></div>
           <h1>
@@ -67,7 +93,7 @@ export default function App() {
       </header>
 
       {/* Stats Section */}
-      <section className="stats-section">
+      <section className="stats-section fade-in">
         <div className="stats-container">
           {stats.map((stat, index) => (
             <div key={index} className="stat-item">
@@ -80,7 +106,7 @@ export default function App() {
 
       <div className="main-wrapper">
         {/* About Section */}
-        <section id="about" className="section">
+        <section id="about" className="section fade-in">
           <div className="section-header">
             <span className="section-tag">About Us</span>
             <h2>Redefining Recruitment Excellence</h2>
@@ -120,7 +146,7 @@ export default function App() {
                   desc: "Sector-specific recruitment across finance, healthcare, manufacturing, and retail." 
                 }
               ].map((service, i) => (
-                <div key={i} className="service-card">
+                <div key={i} className="service-card fade-in">
                   <div className="service-icon">{service.icon}</div>
                   <h4>{service.title}</h4>
                   <p>{service.desc}</p>
@@ -130,7 +156,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="industries-wrapper">
+          <div className="industries-wrapper fade-in">
             <div className="industries-content">
               <h3>Industries We Serve</h3>
               <p>NeoTalent provides specialized recruitment solutions across diverse sectors</p>
@@ -142,7 +168,7 @@ export default function App() {
                   { icon: "💼", name: "Consulting", desc: "Management, Strategy, and Business Advisory" },
                   { icon: "🌱", name: "Startups", desc: "Early-stage, Growth, and Scale-ups" }
                 ].map((industry, i) => (
-                  <div key={i} className="industry-card">
+                  <div key={i} className="industry-card fade-in">
                     <div className="industry-icon">{industry.icon}</div>
                     <div className="industry-text">
                       <h4>{industry.name}</h4>
@@ -155,7 +181,7 @@ export default function App() {
             <div className="industries-image"></div>
           </div>
 
-          <div className="mission-box">
+          <div className="mission-box fade-in">
             <div className="mission-content">
               <h3>Our Mission</h3>
               <p>
@@ -168,7 +194,7 @@ export default function App() {
         </section>
 
         {/* Resume Section */}
-        <section id="resume" className="section">
+        <section id="resume" className="section fade-in">
           <div className="section-header">
             <span className="section-tag">Career Opportunities</span>
             <h2>Submit Your Resume</h2>
@@ -186,7 +212,7 @@ export default function App() {
                   "Personalized job matches based on your skills",
                   "Confidential handling of your information"
                 ].map((benefit, i) => (
-                  <div key={i} className="benefit-item">
+                  <div key={i} className="benefit-item fade-in">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" 
                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -196,7 +222,7 @@ export default function App() {
                 ))}
               </div>
 
-              <div className="resume-form-container">
+              <div className="resume-form-container fade-in">
                 {resumeSubmitted ? (
                   <div className="thank-you-message">
                     <div className="success-icon">✓</div>
@@ -265,7 +291,7 @@ export default function App() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="section">
+        <section id="contact" className="section fade-in">
           <div className="section-header">
             <span className="section-tag">Connect With Us</span>
             <h2>Let's Start a Conversation</h2>
@@ -274,7 +300,7 @@ export default function App() {
           <p className="section-subtitle">Have questions? Looking for opportunities? We're here to help!</p>
 
           <div className="contact-container">
-            <div className="contact-form-container">
+            <div className="contact-form-container fade-in">
               {contactSubmitted ? (
                 <div className="thank-you-message">
                   <div className="success-icon">✓</div>
@@ -326,7 +352,7 @@ export default function App() {
               )}
             </div>
 
-            <div className="contact-info">
+            <div className="contact-info fade-in">
               <div className="contact-card">
                 <h3>Contact Information</h3>
                 <p className="contact-subtitle">Reach out directly or fill out the form</p>
@@ -393,7 +419,7 @@ export default function App() {
       </div>
 
       {/* CTA Section */}
-      <section className="cta-section">
+      <section className="cta-section fade-in">
         <div className="cta-content">
           <h2>Ready to advance your career?</h2>
           <p>Join thousands of professionals who found their dream jobs through NeoTalent</p>
