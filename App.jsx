@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useState, useRef } from "react"
 import "./App.css"
 
 export default function App() {
@@ -8,43 +8,7 @@ export default function App() {
   const [resumeSubmitted, setResumeSubmitted] = useState(false)
   const [contactSubmitted, setContactSubmitted] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
-  const [scrolled, setScrolled] = useState(false)
   const heroRef = useRef(null)
-
-  // Handle scroll effects
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("visible")
-      }),
-      { threshold: 0.2 }
-    )
-
-    document.querySelectorAll(".fade-in").forEach(el => observer.observe(el))
-    
-    // Scroll event for navbar background
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-      
-      // Update active section
-      const sections = ["home", "about", "resume", "contact"]
-      const currentSection = sections.find(section => {
-        if (section === "home") return window.scrollY < document.getElementById("about").offsetTop - 100
-        const el = document.getElementById(section)
-        if (!el) return false
-        const rect = el.getBoundingClientRect()
-        return rect.top <= 100 && rect.bottom >= 100
-      })
-      
-      if (currentSection) setActiveSection(currentSection)
-    }
-    
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      observer.disconnect()
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
 
   // Form submission handlers
   const handleSubmit = (e, setSubmitted) => {
@@ -61,68 +25,6 @@ export default function App() {
       .catch(() => alert("Something went wrong. Please try again later."))
   }
 
-  // Particle background animation for hero section
-  useEffect(() => {
-    if (!heroRef.current) return
-    
-    const canvas = document.createElement("canvas")
-    canvas.className = "particle-canvas"
-    heroRef.current.appendChild(canvas)
-    
-    const ctx = canvas.getContext("2d")
-    canvas.width = heroRef.current.offsetWidth
-    canvas.height = heroRef.current.offsetHeight
-    
-    const particles = []
-    
-    for (let i = 0; i < 75; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 3 + 1,
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.5 + 0.3
-      })
-    }
-    
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
-      for (let i = 0; i < particles.length; i++) {
-        let p = particles[i]
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`
-        ctx.fill()
-        
-        p.x += p.dx
-        p.y += p.dy
-        
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
-      }
-      
-      requestAnimationFrame(animate)
-    }
-    
-    animate()
-    
-    const handleResize = () => {
-      canvas.width = heroRef.current.offsetWidth
-      canvas.height = heroRef.current.offsetHeight
-    }
-    
-    window.addEventListener("resize", handleResize)
-    
-    return () => {
-      window.removeEventListener("resize", handleResize)
-      if (heroRef.current && heroRef.current.contains(canvas)) {
-        heroRef.current.removeChild(canvas)
-      }
-    }
-  }, [heroRef])
-
   // Stats counters
   const stats = [
     { label: "Successful Placements", value: 3500, symbol: "+" },
@@ -134,7 +36,7 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Navbar */}
-      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      <nav className="navbar">
         <div className="logo">
           <img src="/assets/check3.png" alt="NeoTalent Logo" />
         </div>
@@ -197,7 +99,7 @@ export default function App() {
       <section className="stats-section">
         <div className="stats-container">
           {stats.map((stat, index) => (
-            <div key={index} className="stat-item fade-in">
+            <div key={index} className="stat-item">
               <div className="stat-value">{stat.value}{stat.symbol}</div>
               <div className="stat-label">{stat.label}</div>
             </div>
@@ -207,7 +109,7 @@ export default function App() {
 
       <div className="main-wrapper">
         {/* About Section */}
-        <section id="about" className="section fade-in">
+        <section id="about" className="section">
           <div className="section-header">
             <span className="section-tag">About Us</span>
             <h2>Redefining Recruitment Excellence</h2>
@@ -282,7 +184,7 @@ export default function App() {
             <div className="industries-image"></div>
           </div>
 
-          <div className="mission-box fade-in">
+          <div className="mission-box">
             <div className="mission-content">
               <h3>Our Mission</h3>
               <p>
@@ -295,7 +197,7 @@ export default function App() {
         </section>
 
         {/* Resume Section */}
-        <section id="resume" className="section fade-in">
+        <section id="resume" className="section">
           <div className="section-header">
             <span className="section-tag">Career Opportunities</span>
             <h2>Submit Your Resume</h2>
@@ -392,7 +294,7 @@ export default function App() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="section fade-in">
+        <section id="contact" className="section">
           <div className="section-header">
             <span className="section-tag">Connect With Us</span>
             <h2>Let's Start a Conversation</h2>
