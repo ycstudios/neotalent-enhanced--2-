@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import Navigation from "./components/Navigation"
 import "./App.css"
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
       })
       .catch(() => alert("Something went wrong. Please try again later."))
   }
+  
 
   // Stats counters
   const stats = [
@@ -36,38 +38,7 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo">
-          <img src="/assets/check3.png" alt="NeoTalent Logo" />
-        </div>
-
-        <div className="mobile-menu-button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          <div className={`hamburger ${mobileMenuOpen ? "active" : ""}`}>
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-
-        <div className={`nav-links ${mobileMenuOpen ? "mobile-active" : ""}`}>
-          {[
-            { id: "home", label: "Home" },
-            { id: "about", label: "About" },
-            { id: "resume", label: "Submit Resume" },
-            { id: "contact", label: "Contact" }
-          ].map(link => (
-            <a 
-              key={link.id} 
-              href={`#${link.id}`} 
-              className={activeSection === link.id ? "active" : ""}
-              onClick={() => {
-                setMobileMenuOpen(false)
-                setActiveSection(link.id)
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </nav>
+      <Navigation/>
 
       {/* Hero Section */}
       <header id="home" className="hero" ref={heroRef}>
